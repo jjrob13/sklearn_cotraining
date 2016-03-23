@@ -217,5 +217,5 @@ class CoTrainingClassifier(object):
 			y_proba[i][1] = (y1_i_dist[1] + y2_i_dist[1]) / 2
 
 		_epsilon = 0.0001
-		assert all(abs(sum(y_dist) - 1) > _epsilon for y_dist in y_proba)
+		assert all(abs(sum(y_dist) - 1) <= _epsilon for y_dist in y_proba)
 		return y_proba
