@@ -182,7 +182,7 @@ class CoTrainingClassifier(object):
 		proba_supported = self.supports_proba(self.clf1_, X1[0]) and self.supports_proba(self.clf2_, X2[0])
 
 		#fill y_pred with -1 so we can identify the samples in which the classifiers failed to agree
-		y_pred = np.asarray([-1] * len(X1))
+		y_pred = np.asarray([-1] * X1.shape[0])
 
 		for i, (y1_i, y2_i) in enumerate(zip(y1, y2)):
 			if y1_i == y2_i:
@@ -207,7 +207,7 @@ class CoTrainingClassifier(object):
 
 	def predict_proba(self, X1, X2):
 		"""Predict the probability of the samples belonging to each class."""
-		y_proba = np.full((len(X1), 2), -1)
+		y_proba = np.full(X1.shape[0], 2), -1)
 
 		y1_proba = self.clf1_.predict_proba(X1)
 		y2_proba = self.clf2_.predict_proba(X2)
