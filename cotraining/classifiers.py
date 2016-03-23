@@ -207,7 +207,7 @@ class CoTrainingClassifier(object):
 
 	def predict_proba(self, X1, X2):
 		"""Predict the probability of the samples belonging to each class."""
-		y_proba = np.full(X1.shape[0], 2), -1)
+		y_proba = np.full(X1.shape[0], 2), -1))
 
 		y1_proba = self.clf1_.predict_proba(X1)
 		y2_proba = self.clf2_.predict_proba(X2)
