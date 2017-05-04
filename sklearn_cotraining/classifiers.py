@@ -138,7 +138,7 @@ class CoTrainingClassifier(object):
 			add_counter = 0 #number we have added from U to U_
 			num_to_add = len(p) + len(n)
 			while add_counter != num_to_add and U:
-				num_to_add += 1
+				add_counter += 1
 				U_.append(U.pop())
 
 
