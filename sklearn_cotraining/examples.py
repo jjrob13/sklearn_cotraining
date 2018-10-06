@@ -28,28 +28,28 @@ if __name__ == '__main__':
 
 
 
-	print 'Logistic'
+	print ('Logistic')
 	base_lr = LogisticRegression()
 	base_lr.fit(X_labeled, y_labeled)
 	y_pred = base_lr.predict(X_test)
-	print classification_report(y_test, y_pred)
+	print (classification_report(y_test, y_pred))
 
-	print 'Logistic CoTraining'
+	print ('Logistic CoTraining')
 	lg_co_clf = CoTrainingClassifier(LogisticRegression())
 	lg_co_clf.fit(X1, X2, y)
 	y_pred = lg_co_clf.predict(X_test[:, :N_FEATURES // 2], X_test[:, N_FEATURES // 2:])
-	print classification_report(y_test, y_pred)
+	print (classification_report(y_test, y_pred))
 
-	print 'SVM'
+	print ('SVM')
 	base_svm = LinearSVC()
 	base_svm.fit(X_labeled, y_labeled)
 	y_pred = base_lr.predict(X_test)
-	print classification_report(y_test, y_pred)
+	print (classification_report(y_test, y_pred))
 	
-	print 'SVM CoTraining'
+	print ('SVM CoTraining')
 	svm_co_clf = CoTrainingClassifier(LinearSVC(), u=N_SAMPLES//10)
 	svm_co_clf.fit(X1, X2, y)
 	y_pred = svm_co_clf.predict(X_test[:, :N_FEATURES // 2], X_test[:, N_FEATURES // 2:])
-	print classification_report(y_test, y_pred)
+	print (classification_report(y_test, y_pred))
 	
 	
