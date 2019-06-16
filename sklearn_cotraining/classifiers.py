@@ -101,25 +101,24 @@ class CoTrainingClassifier(object):
 			self.clf1_.fit(X1[L], y[L])
 			self.clf2_.fit(X2[L], y[L])
 
-			y1 = self.clf1_.predict(X1[U_])
-			y2 = self.clf2_.predict(X2[U_])
+			y1_prob = self.clf1_.predict_proba(X1[U_])
+			y2_prob = self.clf2_.predict_proba(X2[U_])
 
 			n, p = [], []
 			
-			for i, (y1_i, y2_i) in enumerate(zip(y1, y2)):
-				#we added all that we needed to for this iteration, so break
-				if len(p) == 2 * self.p_ and len(n) == 2 * self.n_:
-					break
-
-				#update our newly 'labeled' samples.  Note that we are only 'labeling' a single sample
-				#with each inner iteration.  We want to add 2p + 2n samples per outer iteration, but classifiers must agree
-
-				if y1_i == y2_i == 1 and len(p) < self.p_:
+			for i in (y1_prob[:,0].argsort())[-self.n_:]:
+				if y1_prob[i,0] > 0.5:
+					n.append(i)
+			for i in (y1_prob[:,1].argsort())[-self.p_:]:
+				if y1_prob[i,1] > 0.5:
 					p.append(i)
 
-				if y2_i == y1_i == 0 and len(n) < self.n_:
+			for i in (y2_prob[:,0].argsort())[-self.n_:]:
+				if y2_prob[i,0] > 0.5:
 					n.append(i)
-
+			for i in (y2_prob[:,1].argsort())[-self.p_:]:
+				if y2_prob[i,1] > 0.5:
+					p.append(i)
 
 			#label the samples and remove thes newly added samples from U_
 			y[[U_[x] for x in p]] = 1
@@ -128,11 +127,7 @@ class CoTrainingClassifier(object):
 			L.extend([U_[x] for x in p])
 			L.extend([U_[x] for x in n])
 
-			#TODO: optimize these removals from U_
-			#this is currently (2p + 2n)O(n)
-			#and I think it can be reduced to O(n) rather easily
-			for i in p: U_.pop(i)
-			for i in n: U_.pop(i)
+			U_ = [elem for elem in U_ if not (elem in p or elem in n)]
 
 			#add new elements to U_
 			add_counter = 0 #number we have added from U to U_
