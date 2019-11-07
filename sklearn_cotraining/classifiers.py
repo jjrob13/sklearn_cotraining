@@ -25,7 +25,7 @@ class CoTrainingClassifier(object):
 
 	def __init__(self, clf, clf2=None, p=-1, n=-1, k=30, u = 75):
 		self.clf1_ = clf
-		
+
 		#we will just use a copy of clf (the same kind of classifier) if clf2 is not specified
 		if clf2 == None:
 			self.clf2_ = copy.copy(clf)
@@ -63,9 +63,9 @@ class CoTrainingClassifier(object):
 		if self.p_ == -1 and self.n_ == -1:
 			num_pos = sum(1 for y_i in y if y_i == 1)
 			num_neg = sum(1 for y_i in y if y_i == 0)
-			
+
 			n_p_ratio = num_neg / float(num_pos)
-		
+
 			if n_p_ratio > 1:
 				self.p_ = 1
 				self.n_ = round(self.p_*n_p_ratio)
@@ -105,7 +105,7 @@ class CoTrainingClassifier(object):
 			y2_prob = self.clf2_.predict_proba(X2[U_])
 
 			n, p = [], []
-			
+
 			for i in (y1_prob[:,0].argsort())[-self.n_:]:
 				if y1_prob[i,0] > 0.5:
 					n.append(i)
@@ -153,7 +153,7 @@ class CoTrainingClassifier(object):
 			return True
 		except:
 			return False
-	
+
 	def predict(self, X1, X2):
 		"""
 		Predict the classes of the samples represented by the features in X1 and X2.
@@ -162,7 +162,7 @@ class CoTrainingClassifier(object):
 		X1 - array-like (n_samples, n_features1)
 		X2 - array-like (n_samples, n_features2)
 
-		
+
 		Output:
 		y - array-like (n_samples)
 			These are the predicted classes of each of the samples.  If the two classifiers, don't agree, we try
@@ -193,7 +193,7 @@ class CoTrainingClassifier(object):
 				#the classifiers disagree and don't support probability, so we guess
 				y_pred[i] = random.randint(0, 1)
 
-			
+
 		#check that we did everything right
 		assert not (-1 in y_pred)
 
@@ -202,7 +202,7 @@ class CoTrainingClassifier(object):
 
 	def predict_proba(self, X1, X2):
 		"""Predict the probability of the samples belonging to each class."""
-		y_proba = np.full((X1.shape[0], 2), -1)
+		y_proba = np.full((X1.shape[0], 2), -1, np.float)
 
 		y1_proba = self.clf1_.predict_proba(X1)
 		y2_proba = self.clf2_.predict_proba(X2)
